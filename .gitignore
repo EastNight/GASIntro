@@ -1,0 +1,14 @@
+/.vs/
+Binaries
+/Intermediate/
+!/Saved/Config/
+/Saved/
+/SVG_Importer.VC.VC.opendb
+/SVG_Importer.VC.db
+/SVG_Importer.sln
+/Packaged/
+*.sln
+/MagicConsole.VC.VC.opendb
+/MagicConsole.VC.db
+DerivedDataCache
+Build

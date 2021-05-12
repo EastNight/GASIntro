@@ -1,0 +1,13 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{D1C71240-4FC4-42AE-BAD2-B598A3521BFF}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "GASIntro",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
