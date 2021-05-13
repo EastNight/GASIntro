@@ -1,13 +1,16 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "BaseCharacter.h"
+#include "GASIntro/Characters/BaseCharacter.h"
+#include "GASIntro/Gameplay/BaseAttributeSet.h"
+#include "AbilitySystemComponent.h"
 
 // Sets default values
 ABaseCharacter::ABaseCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>("AbilitySystemComponent");
+	AttributeSet = CreateDefaultSubobject<UBaseAttributeSet>("AttributeSet");
 }
 
 // Called when the game starts or when spawned
@@ -29,5 +32,20 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+UAbilitySystemComponent* ABaseCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}
+
+void ABaseCharacter::AquireAbility(TSubclassOf<UBaseGameplayAbility> Ability)
+{
+	if (AbilitySystemComponent && Ability)
+	{
+		AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability));
+		// NetMode Owner PlayState, Avator this
+		AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	}
 }
 
