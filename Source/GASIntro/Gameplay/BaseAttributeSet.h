@@ -9,6 +9,9 @@
 /**
  * 
  */
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnAttributeChangeDelegate, float, CurrentValue, float, MaxValue);
+
 UCLASS()
 class GASINTRO_API UBaseAttributeSet : public UAttributeSet
 {
@@ -41,7 +44,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BaseAttributeSet")
 	FGameplayAttributeData MaxStrength;
 
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChangeDelegate OnHealthChange;
 
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChangeDelegate OnManaChange;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChangeDelegate OnStrengthChange;
+	
 public:
 	void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
 };
