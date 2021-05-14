@@ -18,6 +18,7 @@ void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	AddGameplayTag(FullHealthTag, 1);
 }
 
 // Called every frame
@@ -39,13 +40,39 @@ UAbilitySystemComponent* ABaseCharacter::GetAbilitySystemComponent() const
 	return AbilitySystemComponent;
 }
 
-void ABaseCharacter::AquireAbility(TSubclassOf<UBaseGameplayAbility> Ability)
+FGameplayAbilityInfo ABaseCharacter::AquireAbility(TSubclassOf<UBaseGameplayAbility> Ability)
 {
 	if (AbilitySystemComponent && Ability)
 	{
 		AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability));
 		// NetMode Owner PlayState, Avator this
 		AbilitySystemComponent->InitAbilityActorInfo(this, this);
+
+		UBaseGameplayAbility* AbilityInstance = Ability.Get()->GetDefaultObject<UBaseGameplayAbility>();
+		if (AbilityInstance)
+		{
+			return AbilityInstance->GetAbilityInfo();
+		}
+	}
+
+	return FGameplayAbilityInfo();
+}
+
+void ABaseCharacter::AddGameplayTag(FGameplayTag& Tag, int Count)
+{
+	GetAbilitySystemComponent()->AddLooseGameplayTag(Tag, Count);
+}
+
+void ABaseCharacter::RemoveGameplayTag(FGameplayTag& Tag, int Count)
+{
+	if (Count <= 0)
+	{
+		GetAbilitySystemComponent()->SetTagMapCount(Tag,1);
+		GetAbilitySystemComponent()->RemoveLooseGameplayTag(Tag, 1);
+	}
+	else
+	{
+		GetAbilitySystemComponent()->RemoveLooseGameplayTag(Tag, Count);
 	}
 }
 

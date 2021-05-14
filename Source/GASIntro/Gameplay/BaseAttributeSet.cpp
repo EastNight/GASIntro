@@ -4,6 +4,7 @@
 #include "GASIntro/Gameplay/BaseAttributeSet.h"
 #include "GameplayEffect.h"
 #include "GameplayEffectExtension.h"
+#include "GASIntro/Characters/BaseCharacter.h"
 
 UBaseAttributeSet::UBaseAttributeSet():
 	Attack(0.0f),
@@ -25,6 +26,19 @@ void UBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 		Health.SetCurrentValue(FMath::Clamp(Health.GetCurrentValue(), 0.0f, MaxHealth.GetCurrentValue()));
 		Health.SetBaseValue(FMath::Clamp(Health.GetBaseValue(), 0.0f, MaxHealth.GetBaseValue()));
 		OnHealthChange.Broadcast(Health.GetCurrentValue(), MaxHealth.GetCurrentValue());
+
+		ABaseCharacter* OwnerCharacter = Cast<ABaseCharacter>(GetOwningActor());
+		if (OwnerCharacter)
+		{
+			if (Health.GetCurrentValue() == MaxHealth.GetCurrentValue())
+			{
+				OwnerCharacter->AddGameplayTag(OwnerCharacter->FullHealthTag, 1);
+			}
+			else
+			{
+				OwnerCharacter->RemoveGameplayTag(OwnerCharacter->FullHealthTag, -1);
+			}
+		}
 	}
 
 	if(Data.EvaluatedData.Attribute.GetUProperty() == FindFieldChecked<UProperty>(UBaseAttributeSet::StaticClass(),GET_MEMBER_NAME_CHECKED(UBaseAttributeSet,Mana)))

@@ -24,6 +24,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "BaseCharacter")
 	class UBaseAttributeSet* AttributeSet;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BaseCharacter")
+	FGameplayTag FullHealthTag;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -39,5 +42,9 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const;
 
 	UFUNCTION(BlueprintCallable,Category = "BaseCharacter")
-	void AquireAbility(TSubclassOf<UBaseGameplayAbility> Ability);
+	FGameplayAbilityInfo AquireAbility(TSubclassOf<UBaseGameplayAbility> Ability);
+
+	void AddGameplayTag(FGameplayTag& Tag,int Count);
+
+	void RemoveGameplayTag(FGameplayTag& Tag,int Count);
 };
